@@ -2,13 +2,13 @@ import pygame as pg
 from random import randint
 
 WIDTH, HEIGHT = (1000, 800)
-FPS = 60
-CELL_SIZE = 40
-CELL_BORDER = 10
+FPS = 30
+CELL_SIZE = 8
+CELL_BORDER = 1
 EMPTY_CELL_COLOR = (40, 40, 40)
 ALIVE_CELL_COLOR = (150, 150, 150)
-BACKGROUND_COLOR = (10, 10, 10)
-GRID_SIZE = 10
+BACKGROUND_COLOR = (30, 30, 30)
+GRID_SIZE = 100
 
 class GameLogic:
     def __init__(self) -> None:
@@ -21,9 +21,10 @@ class GameLogic:
 
     def draw_window(self) -> None:
         self.Window.fill(BACKGROUND_COLOR) #BG color
-        grid = [(x, y) for x in range(0, WIDTH, CELL_SIZE) for y in range(0, HEIGHT, CELL_SIZE)]
-        for x, y in grid:
-            pg.draw.rect(self.Window, EMPTY_CELL_COLOR, (x + CELL_BORDER, y + CELL_BORDER, CELL_SIZE - CELL_BORDER, CELL_SIZE - CELL_BORDER))
+        for x in range(GRID_SIZE): 
+            for y in range(GRID_SIZE):
+                pg.draw.rect(self.Window, ALIVE_CELL_COLOR if self.grid[x][y] else EMPTY_CELL_COLOR, (x*CELL_SIZE + CELL_BORDER, y*CELL_SIZE + CELL_BORDER, CELL_SIZE - CELL_BORDER, CELL_SIZE - CELL_BORDER))
+
         pg.display.flip()
 
     def handle_events(self) -> None:
@@ -48,7 +49,7 @@ class GameLogic:
         directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)] # Maybe make it global
         x, y = cell
         for cd, rd in directions:
-            if (0 < x + cd < GRID_SIZE - 1) and (0 < y + rd < GRID_SIZE - 1):
+            if (0 < x + cd < GRID_SIZE) and (0 < y + rd < GRID_SIZE):
                 if self.grid[x+cd][y+rd]:
                     neighbors_count += 1
         
